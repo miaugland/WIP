@@ -1,0 +1,165 @@
+// This is your Prisma schema file for the "better Goodreads" project.
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------- ENUMS ----------
+
+enum ReadingStatus {
+  WANT_TO_READ
+  READING
+  READ
+  DNF // Did Not Finish
+}
+
+enum BookFormat {
+  PHYSICAL
+  EBOOK
+  AUDIOBOOK
+}
+
+// ---------- CORE MODELS ----------
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  image         String?
+  createdAt     DateTime  @default(now())
+
+  shelfEntries  ShelfEntry[]
+  reviews       Review[]
+  readingLogs   ReadingLog[]
+  notes         Note[]
+}
+
+model Author {
+  id     String @id @default(cuid())
+  name   String
+  books  BookAuthor[]
+}
+
+model Series {
+  id     String @id @default(cuid())
+  name   String
+  books  Book[]
+}
+
+model Genre {
+  id     String @id @default(cuid())
+  name   String @unique
+  books  BookGenre[]
+}
+
+model Book {
+  id             String   @id @default(cuid())
+  title          String
+  description    String?
+  coverUrl       String?
+  pageCount      Int?
+  publishedYear  Int?
+
+  // ID from ekstern kilde (Google Books / Open Library) så du slipper
+  // å duplisere bøker når flere brukere legger til samme bok
+  externalId     String?  @unique
+
+  seriesId       String?
+  series         Series?  @relation(fields: [seriesId], references: [id])
+  seriesPosition Int?     // f.eks. "bok 3 av serien"
+
+  authors        BookAuthor[]
+  genres         BookGenre[]
+  shelfEntries   ShelfEntry[]
+  reviews        Review[]
+  readingLogs    ReadingLog[]
+  notes          Note[]
+
+  createdAt      DateTime @default(now())
+}
+
+// Join-tabeller for mange-til-mange (eksplisitte, så du kan legge til
+// f.eks. "rolle" på forfatter senere om du vil: oversetter, illustratør osv.)
+
+model BookAuthor {
+  bookId   String
+  authorId String
+  book     Book   @relation(fields: [bookId], references: [id])
+  author   Author @relation(fields: [authorId], references: [id])
+
+  @@id([bookId, authorId])
+}
+
+model BookGenre {
+  bookId  String
+  genreId String
+  book    Book  @relation(fields: [bookId], references: [id])
+  genre   Genre @relation(fields: [genreId], references: [id])
+
+  @@id([bookId, genreId])
+}
+
+// ---------- BRUKERENS FORHOLD TIL EN BOK ----------
+
+// Dette er "hylla" - erstatter Goodreads sine enkle shelves,
+// men rikere: status, format, om det er reread, tidspunkt.
+model ShelfEntry {
+  id         String        @id @default(cuid())
+  userId     String
+  bookId     String
+  status     ReadingStatus
+  format     BookFormat?
+  isReread   Boolean       @default(false)
+  startedAt  DateTime?
+  finishedAt DateTime?
+
+  user       User @relation(fields: [userId], references: [id])
+  book       Book @relation(fields: [bookId], references: [id])
+
+  @@unique([userId, bookId, isReread, startedAt]) // tillater flere "runder" med samme bok
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  bookId    String
+  rating    Int      // f.eks. 1-10 for finere granularitet enn Goodreads sine 1-5 stjerner
+  content   String?
+  createdAt DateTime @default(now())
+
+  user      User @relation(fields: [userId], references: [id])
+  book      Book @relation(fields: [bookId], references: [id])
+
+  @@unique([userId, bookId])
+}
+
+// Brukes til lesestatistikk: sider lest per dag, streaks, grafer over året
+model ReadingLog {
+  id         String   @id @default(cuid())
+  userId     String
+  bookId     String
+  date       DateTime @default(now())
+  pagesRead  Int
+
+  user       User @relation(fields: [userId], references: [id])
+  book       Book @relation(fields: [bookId], references: [id])
+}
+
+// Private notater/sitater knyttet til en side i boka
+model Note {
+  id        String   @id @default(cuid())
+  userId    String
+  bookId    String
+  page      Int?
+  content   String
+  isPrivate Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  user      User @relation(fields: [userId], references: [id])
+  book      Book @relation(fields: [bookId], references: [id])
+}
