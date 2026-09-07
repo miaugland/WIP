@@ -35,7 +35,7 @@ export async function searchBooks(query: string): Promise<GoogleBookResult[]> {
   const res = await fetch(url);
 
   if (!res.ok) {
-    throw new Error(`Google Books API feilet med status ${res.status}`);
+    throw new Error(`Google Books API failed with status ${res.status}`);
   }
 
   const data: GoogleVolumesResponse = await res.json();
@@ -46,7 +46,7 @@ export async function searchBooks(query: string): Promise<GoogleBookResult[]> {
 
     return {
       externalId: item.id,
-      title: info.title ?? "Ukjent tittel",
+      title: info.title ?? "Unknown title",
       authors: info.authors ?? [],
       description: info.description ?? null,
       coverUrl: info.imageLinks?.thumbnail ?? null,

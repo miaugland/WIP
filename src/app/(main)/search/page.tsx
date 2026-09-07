@@ -27,12 +27,12 @@ export default function SearchPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error ?? "Noe gikk galt");
+        throw new Error(data.error ?? "Something went wrong");
       }
 
       setResults(data);
     } catch {
-      setError("Klarte ikke å søke etter bøker akkurat nå.");
+      setError("Couldn't make a search at this moment.");
       setResults([]);
     } finally {
       setLoading(false);
@@ -41,14 +41,14 @@ export default function SearchPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="text-xl font-semibold">Søk etter bøker</h1>
+      <h1 className="text-xl font-semibold">Search for books</h1>
 
       <form onSubmit={handleSearch} className="mt-4 flex gap-2">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Tittel, forfatter …"
+          placeholder="Title, author …"
           className="flex-1 rounded-md border border-black/10 px-3 py-2 text-sm dark:border-white/15"
         />
         <button
@@ -56,7 +56,7 @@ export default function SearchPage() {
           disabled={loading}
           className="rounded-md bg-[#181717] px-4 py-2 text-sm font-medium text-white hover:bg-[#181717]/90 disabled:opacity-50"
         >
-          {loading ? "Søker …" : "Søk"}
+          {loading ? "Searching …" : "Search"}
         </button>
       </form>
 
@@ -90,7 +90,7 @@ export default function SearchPage() {
 
       {!loading && !error && hasSearched && results.length === 0 && (
         <p className="mt-6 text-sm text-black/60 dark:text-white/60">
-          Ingen resultater.
+          No results.
         </p>
       )}
     </main>

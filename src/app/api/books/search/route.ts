@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
   if (!query) {
     return NextResponse.json(
-      { error: "Mangler søkeord (?q=...)" },
+      { error: "Missing search (?q=...)" },
       { status: 400 }
     );
   }
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(results);
   } catch {
     return NextResponse.json(
-      { error: "Klarte ikke å søke etter bøker akkurat nå" },
+      { error: "Couldn't make a search at this moment." },
       { status: 502 }
     );
   }
