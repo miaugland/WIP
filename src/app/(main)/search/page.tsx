@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import type { GoogleBookResult } from "@/lib/googleBooks";
+import AddToShelfButton from "@/components/AddToShelfButton";
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");
@@ -83,6 +84,9 @@ export default function SearchPage() {
                   {book.publishedYear}
                 </p>
               )}
+              <div className="mt-2">
+                <AddToShelfButton book={book} />
+              </div>
             </div>
           </li>
         ))}
