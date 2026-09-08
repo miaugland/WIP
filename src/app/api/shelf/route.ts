@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { externalId, title, description, coverUrl, publishedYear, pageCount } = body;
+  const { externalId, title, authors, description, coverUrl, publishedYear, pageCount } = body;
 
   if (!externalId || !title) {
     return NextResponse.json(
@@ -48,6 +48,21 @@ export async function POST(request: NextRequest) {
     update: {},
     create: { externalId, title, description, coverUrl, publishedYear, pageCount },
   });
+
+  if (Array.isArray(authors)) {
+    for (const name of authors) {
+      let author = await prisma.author.findFirst({ where: { name } });
+      if (!author) {
+        author = await prisma.author.create({ data: { name } });
+      }
+
+      await prisma.bookAuthor.upsert({
+        where: { bookId_authorId: { bookId: book.id, authorId: author.id } },
+        update: {},
+        create: { bookId: book.id, authorId: author.id },
+      });
+    }
+  }
 
   const existing = await prisma.shelfEntry.findFirst({
     where: { userId: session.user.id, bookId: book.id },

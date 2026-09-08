@@ -15,11 +15,16 @@ export default async function BookPage({
   const { id } = await params;
   const session = await auth();
 
-  const book = await prisma.book.findUnique({ where: { id } });
+  const book = await prisma.book.findUnique({
+    where: { id },
+    include: { authors: { include: { author: true } } },
+  });
 
   if (!book) {
     notFound();
   }
+
+  const authorNames = book.authors.map((bookAuthor) => bookAuthor.author.name);
 
   const shelfEntry = session?.user
     ? await prisma.shelfEntry.findFirst({
@@ -50,6 +55,11 @@ export default async function BookPage({
 
         <div>
           <h1 className="text-xl font-semibold">{book.title}</h1>
+          {authorNames.length > 0 && (
+            <p className="text-sm text-black/60 dark:text-white/60">
+              {authorNames.join(", ")}
+            </p>
+          )}
           {book.publishedYear && (
             <p className="mt-1 text-sm text-black/40 dark:text-white/40">
               {book.publishedYear}
@@ -69,7 +79,7 @@ export default async function BookPage({
                 book={{
                   externalId: book.externalId ?? "",
                   title: book.title,
-                  authors: [],
+                  authors: authorNames,
                   description: book.description,
                   coverUrl: book.coverUrl,
                   publishedYear: book.publishedYear,
