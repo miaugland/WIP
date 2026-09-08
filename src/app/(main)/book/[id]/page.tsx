@@ -1,5 +1,6 @@
 // book details
 
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
@@ -28,7 +29,14 @@ export default async function BookPage({
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <div className="flex gap-6">
+      <Link
+        href="/shelf"
+        className="text-sm text-black/60 hover:underline dark:text-white/60"
+      >
+        ← Back to my shelf
+      </Link>
+
+      <div className="mt-4 flex gap-6">
         {book.coverUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
