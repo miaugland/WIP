@@ -8,6 +8,7 @@ import prisma from "@/lib/prisma";
 import AddToShelfButton from "@/components/AddToShelfButton";
 import ShelfStatusSelect from "@/components/ShelfStatusSelect";
 import RemoveFromShelfButton from "@/components/RemoveFromShelfButton";
+import ReviewForm from "@/components/ReviewForm";
 
 export async function generateMetadata({
   params,
@@ -53,6 +54,10 @@ export default async function BookPage({
     include: { user: { select: { name: true } } },
     orderBy: { createdAt: "desc" },
   });
+
+  const myReview = session?.user
+    ? reviews.find((review) => review.userId === session.user.id)
+    : undefined;
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
@@ -124,6 +129,18 @@ export default async function BookPage({
 
       <div className="mt-8">
         <h2 className="text-lg font-semibold">Reviews</h2>
+
+        {session?.user ? (
+          <ReviewForm
+            bookId={book.id}
+            initialRating={myReview?.rating}
+            initialContent={myReview?.content}
+          />
+        ) : (
+          <p className="mt-2 text-sm text-black/60 dark:text-white/60">
+            Log in to write a review.
+          </p>
+        )}
 
         {reviews.length === 0 ? (
           <p className="mt-2 text-sm text-black/60 dark:text-white/60">
