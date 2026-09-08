@@ -48,6 +48,12 @@ export default async function BookPage({
       })
     : null;
 
+  const reviews = await prisma.review.findMany({
+    where: { bookId: book.id },
+    include: { user: { select: { name: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
       <Link
@@ -115,6 +121,37 @@ export default async function BookPage({
           {book.description}
         </p>
       )}
+
+      <div className="mt-8">
+        <h2 className="text-lg font-semibold">Reviews</h2>
+
+        {reviews.length === 0 ? (
+          <p className="mt-2 text-sm text-black/60 dark:text-white/60">
+            No reviews yet.
+          </p>
+        ) : (
+          <ul className="mt-4 flex flex-col gap-4">
+            {reviews.map((review) => (
+              <li
+                key={review.id}
+                className="rounded-md border border-black/10 p-3 dark:border-white/15"
+              >
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <span>{review.user.name ?? "Anonymous"}</span>
+                  <span className="text-black/40 dark:text-white/40">
+                    {review.rating}/10
+                  </span>
+                </div>
+                {review.content && (
+                  <p className="mt-1 text-sm text-black/80 dark:text-white/80">
+                    {review.content}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </main>
   );
 }
