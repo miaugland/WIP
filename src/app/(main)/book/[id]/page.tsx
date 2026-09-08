@@ -34,7 +34,10 @@ export default async function BookPage({
 
   const book = await prisma.book.findUnique({
     where: { id },
-    include: { authors: { include: { author: true } } },
+    include: {
+      authors: { include: { author: true } },
+      genres: { include: { genre: true } },
+    },
   });
 
   if (!book) {
@@ -42,6 +45,7 @@ export default async function BookPage({
   }
 
   const authorNames = book.authors.map((bookAuthor) => bookAuthor.author.name);
+  const genreNames = book.genres.map((bookGenre) => bookGenre.genre.name);
 
   const shelfEntry = session?.user
     ? await prisma.shelfEntry.findFirst({
@@ -93,6 +97,18 @@ export default async function BookPage({
               {book.pageCount ? ` · ${book.pageCount} pages` : ""}
             </p>
           )}
+          {genreNames.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {genreNames.map((genre) => (
+                <span
+                  key={genre}
+                  className="rounded-full border border-black/10 px-2 py-0.5 text-xs text-black/60 dark:border-white/15 dark:text-white/60"
+                >
+                  {genre}
+                </span>
+              ))}
+            </div>
+          )}
 
           <div className="mt-4">
             {!session?.user ? (
@@ -110,6 +126,7 @@ export default async function BookPage({
                   externalId: book.externalId ?? "",
                   title: book.title,
                   authors: authorNames,
+                  genres: genreNames,
                   description: book.description,
                   coverUrl: book.coverUrl,
                   publishedYear: book.publishedYear,

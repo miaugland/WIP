@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { externalId, title, authors, description, coverUrl, publishedYear, pageCount } = body;
+  const { externalId, title, authors, genres, description, coverUrl, publishedYear, pageCount } = body;
 
   if (!externalId || !title) {
     return NextResponse.json(
@@ -60,6 +60,22 @@ export async function POST(request: NextRequest) {
         where: { bookId_authorId: { bookId: book.id, authorId: author.id } },
         update: {},
         create: { bookId: book.id, authorId: author.id },
+      });
+    }
+  }
+
+  if (Array.isArray(genres)) {
+    for (const name of genres) {
+      const genre = await prisma.genre.upsert({
+        where: { name },
+        update: {},
+        create: { name },
+      });
+
+      await prisma.bookGenre.upsert({
+        where: { bookId_genreId: { bookId: book.id, genreId: genre.id } },
+        update: {},
+        create: { bookId: book.id, genreId: genre.id },
       });
     }
   }

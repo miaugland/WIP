@@ -4,6 +4,7 @@ export type GoogleBookResult = {
   externalId: string;
   title: string;
   authors: string[];
+  genres: string[];
   description: string | null;
   coverUrl: string | null;
   publishedYear: number | null;
@@ -16,6 +17,7 @@ type GoogleVolumesResponse = {
     volumeInfo?: {
       title?: string;
       authors?: string[];
+      categories?: string[];
       description?: string;
       publishedDate?: string;
       pageCount?: number;
@@ -48,6 +50,7 @@ export async function searchBooks(query: string): Promise<GoogleBookResult[]> {
       externalId: item.id,
       title: info.title ?? "Unknown title",
       authors: info.authors ?? [],
+      genres: info.categories ?? [],
       description: info.description ?? null,
       coverUrl: info.imageLinks?.thumbnail ?? null,
       publishedYear: Number.isNaN(year) ? null : year,
