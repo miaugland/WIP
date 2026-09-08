@@ -1,5 +1,6 @@
 // "min hylle"
 
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
@@ -44,7 +45,9 @@ export default async function ShelfPage() {
                 <div className="h-24 w-16 shrink-0 rounded bg-black/5 dark:bg-white/10" />
               )}
               <div>
-                <p className="font-medium">{entry.book.title}</p>
+                <Link href={`/book/${entry.book.id}`} className="font-medium hover:underline">
+                  {entry.book.title}
+                </Link>
                 {entry.book.publishedYear && (
                   <p className="text-sm text-black/40 dark:text-white/40">
                     {entry.book.publishedYear}
