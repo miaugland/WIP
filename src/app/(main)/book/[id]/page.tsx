@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import AddToShelfButton from "@/components/AddToShelfButton";
 import ShelfStatusSelect from "@/components/ShelfStatusSelect";
+import RemoveFromShelfButton from "@/components/RemoveFromShelfButton";
 
 export async function generateMetadata({
   params,
@@ -88,7 +89,10 @@ export default async function BookPage({
                 Log in to add this book to your shelf.
               </p>
             ) : shelfEntry ? (
-              <ShelfStatusSelect entryId={shelfEntry.id} status={shelfEntry.status} />
+              <div className="flex flex-col gap-2">
+                <ShelfStatusSelect entryId={shelfEntry.id} status={shelfEntry.status} />
+                <RemoveFromShelfButton entryId={shelfEntry.id} />
+              </div>
             ) : (
               <AddToShelfButton
                 book={{

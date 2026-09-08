@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import ShelfStatusSelect from "@/components/ShelfStatusSelect";
+import RemoveFromShelfButton from "@/components/RemoveFromShelfButton";
 
 export default async function ShelfPage() {
   const session = await auth();
@@ -54,6 +55,9 @@ export default async function ShelfPage() {
                   </p>
                 )}
                 <ShelfStatusSelect entryId={entry.id} status={entry.status} />
+                <div className="mt-2">
+                  <RemoveFromShelfButton entryId={entry.id} />
+                </div>
               </div>
             </li>
           ))}

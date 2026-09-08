@@ -41,3 +41,32 @@ export async function PATCH(
 
   return NextResponse.json(updated);
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const session = await auth();
+
+  if (!session?.user) {
+    return NextResponse.json(
+      { error: "You have to be logged in" },
+      { status: 401 }
+    );
+  }
+
+  const { id } = await params;
+
+  const entry = await prisma.shelfEntry.findUnique({ where: { id } });
+
+  if (!entry || entry.userId !== session.user.id) {
+    return NextResponse.json({ error: "Entry not found" }, { status: 404 });
+  }
+
+  await prisma.shelfEntry.delete({ where: { id } });
+
+  revalidatePath("/shelf");
+  revalidatePath(`/book/${entry.bookId}`);
+
+  return NextResponse.json({ success: true });
+}
