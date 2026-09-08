@@ -1,11 +1,26 @@
 // book details
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import AddToShelfButton from "@/components/AddToShelfButton";
 import ShelfStatusSelect from "@/components/ShelfStatusSelect";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const book = await prisma.book.findUnique({
+    where: { id },
+    select: { title: true },
+  });
+
+  return { title: book?.title ?? "Book not found" };
+}
 
 export default async function BookPage({
   params,
