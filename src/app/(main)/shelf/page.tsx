@@ -3,13 +3,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-
-const statusLabels: Record<string, string> = {
-  WANT_TO_READ: "Vil lese",
-  READING: "Leser nå",
-  READ: "Lest",
-  DNF: "Ikke fullført",
-};
+import ShelfStatusSelect from "@/components/ShelfStatusSelect";
 
 export default async function ShelfPage() {
   const session = await auth();
@@ -26,11 +20,11 @@ export default async function ShelfPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="text-xl font-semibold">Hylla mi</h1>
+      <h1 className="text-xl font-semibold">My shelf</h1>
 
       {shelfEntries.length === 0 ? (
         <p className="mt-6 text-sm text-black/60 dark:text-white/60">
-          Du har ikke lagt til noen bøker ennå.
+          You don't have any books yet.
         </p>
       ) : (
         <ul className="mt-6 flex flex-col gap-4">
@@ -56,9 +50,7 @@ export default async function ShelfPage() {
                     {entry.book.publishedYear}
                   </p>
                 )}
-                <p className="mt-1 text-sm text-black/60 dark:text-white/60">
-                  {statusLabels[entry.status] ?? entry.status}
-                </p>
+                <ShelfStatusSelect entryId={entry.id} status={entry.status} />
               </div>
             </li>
           ))}

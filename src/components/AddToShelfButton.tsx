@@ -29,7 +29,7 @@ export default function AddToShelfButton({ book }: { book: GoogleBookResult }) {
   }
 
   if (status === "added") {
-    return <span className="text-sm text-green-600">Lagt til i hylla ✓</span>;
+    return <span className="text-sm text-green-600">Added to your shelf. ✓</span>;
   }
 
   return (
@@ -40,10 +40,10 @@ export default function AddToShelfButton({ book }: { book: GoogleBookResult }) {
         disabled={status === "loading"}
         className="rounded-md border border-black/10 px-3 py-1.5 text-sm font-medium hover:bg-black/5 disabled:opacity-50 dark:border-white/15 dark:hover:bg-white/10"
       >
-        {status === "loading" ? "Legger til …" : "Legg til i hylle"}
+        {status === "loading" ? "Adding ..." : "Add to shelf"}
       </button>
       {status === "error" && (
-        <span className="text-sm text-red-600">Noe gikk galt</span>
+        <span className="text-sm text-red-600">Something went wrong.</span>
       )}
     </div>
   );

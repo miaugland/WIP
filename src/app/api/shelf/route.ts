@@ -9,7 +9,7 @@ export async function GET() {
 
   if (!session?.user) {
     return NextResponse.json(
-      { error: "Du må være logget inn" },
+      { error: "You have to be logged in." },
       { status: 401 }
     );
   }
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
   if (!session?.user) {
     return NextResponse.json(
-      { error: "Du må være logget inn" },
+      { error: "You have to be logged in" },
       { status: 401 }
     );
   }
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
   if (!externalId || !title) {
     return NextResponse.json(
-      { error: "Mangler externalId eller title" },
+      { error: "Missing externalId or title" },
       { status: 400 }
     );
   }
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
 
   if (existing) {
     return NextResponse.json(
-      { message: "Boka er allerede i hylla", shelfEntry: existing },
+      { message: "This book is already on your shelf", shelfEntry: existing },
       { status: 200 }
     );
   }
