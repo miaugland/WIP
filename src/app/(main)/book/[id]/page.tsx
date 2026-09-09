@@ -80,11 +80,11 @@ export default async function BookPage({
   const averageRatingOutOfFive = averageRating ? averageRating / 2 : null
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-10">
+    <main className="min-h-screen py-10">
 
 
       {/* Path to the book: My shelf / genre / book */}
-      <div className="flex items-center gap-2 text-sm text-muted">
+      <div className="mx-auto max-w-270 px-7 flex items-center gap-2 text-sm text-muted">
         <Link
           href="/shelf"
           className="text-muted hover:text-accent-hover">
@@ -98,10 +98,10 @@ export default async function BookPage({
 
       {/* Top section: cover image on the left, everything else on the right */}
       <section className="relative mt-4 overflow-hidden rounded-b-[44px] bg-linear-to-b from-[#fbeef1] to-[#fdf5f3]">
-        <div className="mx-auto grid max-w-270 grid-cols-[minmax(0,200px)_minmax(0,1fr)] items-center gap-11 px-7 py-11">
+        <div className="mx-auto max-w-270 grid grid-cols-[minmax(0,200px)_minmax(0,1fr)] items-center gap-11 px-7 py-11">
 
           {/*  bookcover  */}
-          <div className="aspect-2/3 overflow-hidden rounded-1-1g rounded-r-[22px] shadow-[0_26px_50px_-26px_rgba(59,43,46,0.5)]">
+          <div className="aspect-2/3 overflow-hidden rounded-1-1g rounded-r-[22px] shadow-xl">
             {book.coverUrl ? (
               <img
                 src={book.coverUrl}
@@ -141,13 +141,17 @@ export default async function BookPage({
 
               <span>{reviews.length} reviews</span>
 
+              {book.pageCount && (
+                <>
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#dcc2c8]" />
+                  <span>{book.pageCount} pages</span>
+                </>
+              )}
+
               {book.publishedYear && (
                 <>
                   <span className="h-1.5 w-1.5 rounded-full bg-[#dcc2c8]" />
-                  <span>
-                    {book.pageCount ? `${book.pageCount} pages · ` : ""}
-                    {book.publishedYear}
-                  </span>
+                  <span>{book.publishedYear}</span>
                 </>
               )}
             </div>
@@ -157,13 +161,15 @@ export default async function BookPage({
 
       {/* Book description, full width below the cover/info row */}
       {book.description && (
-        <p className="mt-6 text-sm text-black/80 dark:text-white/80">
-          {book.description}
-        </p>
+        <div className="mx-auto  max-w-270 px-7">
+          <p className="mt-6 text-sm text-black/80 dark:text-white/80">
+            {book.description}
+          </p>
+        </div>
       )}
 
       {/* Reviews section: your own review form on top, everyone's reviews listed below */}
-      <div className="mt-8">
+      <div className="mx-auto max-w-270 px-7 mt-8">
         <h2 className="text-lg font-semibold">Reviews</h2>
 
         {/* Form is pre-filled + says "Update review" if you already reviewed this book */}
