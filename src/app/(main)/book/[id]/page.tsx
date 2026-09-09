@@ -162,7 +162,7 @@ export default async function BookPage({
       {/* Book description, full width below the cover/info row */}
       {book.description && (
         <div className="mx-auto  max-w-270 px-7">
-          <p className="mt-6 text-sm text-black/80 dark:text-white/80">
+          <p className="mt-6 text-sm text-ink">
             {book.description}
           </p>
         </div>
