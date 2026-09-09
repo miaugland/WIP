@@ -10,6 +10,9 @@ import ShelfStatusSelect from "@/components/ShelfStatusSelect";
 import RemoveFromShelfButton from "@/components/RemoveFromShelfButton";
 import ReviewForm from "@/components/ReviewForm";
 
+function formatReviewDate(date: Date) {
+  return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long" }).format(date);
+}
 
 export async function generateMetadata({
   params,
@@ -220,29 +223,44 @@ export default async function BookPage({
 
         {/* List of all reviews for this book (including your own), newest first */}
         {reviews.length === 0 ? (
-          <p className="mt-2 text-sm text-black/60 dark:text-white/60">
-            No reviews yet.
-          </p>
+          <p className="mt-4 text-sm text-muted">No reviews yet.</p>
         ) : (
-          <ul className="mt-4 flex flex-col gap-4">
-            {reviews.map((review) => (
-              <li
-                key={review.id}
-                className="rounded-md border border-black/10 p-3 dark:border-white/15"
-              >
-                <div className="flex items-center gap-2 text-sm font-medium">
-                  <span>{review.user.name ?? "Anonymous"}</span>
-                  <span className="text-black/40 dark:text-white/40">
-                    {review.rating}/10
-                  </span>
-                </div>
-                {review.content && (
-                  <p className="mt-1 text-sm text-black/80 dark:text-white/80">
-                    {review.content}
-                  </p>
-                )}
-              </li>
-            ))}
+          <ul className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4.5">
+            {reviews.map((review) => {
+              const ratingOutOfFive = review.rating / 2;
+              const fullStars = Math.round(ratingOutOfFive);
+
+              return (
+                <li
+                  key={review.id}
+                  className="flex flex-col gap-3.5 rounded-[26px] bg-white p-5 shadow-[0_16px_36px_-30px_rgba(59,43,46,0.5)]"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-10 w-10 flex-none rounded-full bg-[#f6dfe4]" />
+                    <div className="min-w-0">
+                      <div className="text-[14.5px]">
+                        {review.user.name ?? "Anonymous"}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[12.5px] tracking-wider text-accent-hover">
+                          {"★".repeat(fullStars)}
+                          <span className="text-[#e2cdd2]">{"★".repeat(5 - fullStars)}</span>
+                        </span>
+                        <span className="text-xs text-muted-2">
+                          {formatReviewDate(review.createdAt)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {review.content && (
+                    <p className="m-0 text-[14.5px] text-wrap-pretty text-[#584449]">
+                      {review.content}
+                    </p>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
