@@ -70,7 +70,7 @@ export default function ShelfStatusSelect({
           );
         })}
       </div>
-      {error && <p className="mt-2 text-sm text-red-600"> Couldn't update</p>}
+      {error && <p className="mt-2 text-sm text-error"> Couldn't update</p>}
     </div>
   );
 }

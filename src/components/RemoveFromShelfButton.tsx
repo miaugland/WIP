@@ -33,11 +33,11 @@ export default function RemoveFromShelfButton({ entryId }: { entryId: string }) 
         type="button"
         onClick={handleClick}
         disabled={loading}
-        className="text-[12.5px] text-muted underline-offset-2 hover:text-red-600 hover:underline disabled:opacity-50"
+        className="text-[12.5px] text-muted underline-offset-2 hover:text-error hover:underline disabled:opacity-50"
       >
         {loading ? "Removing …" : "Remove from shelf"}
       </button>
-      {error && <span className="mt-1 text-sm text-red-600">Couldn't remove</span>}
+      {error && <span className="mt-1 text-sm text-error">Couldn't remove</span>}
     </div>
   );
 }
