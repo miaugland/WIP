@@ -31,3 +31,5 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     </html>
   );
 }
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:wght@300..600&display=swap" rel="stylesheet" />

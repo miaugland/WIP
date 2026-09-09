@@ -159,6 +159,39 @@ export default async function BookPage({
         </div>
       </section>
 
+      {/*shelf status panel - overlaps the bottom of the section above*/}
+      <div className="mx-auto max-w-270 px-7">
+        <div className="relative z-10 -mt-6.5 grid grid-cols-[repeat(auto-fit,minmax(268px,1fr))] gap-4.5">
+          <div className="rounded-[26px] bg-white p-5 shadow-[0_16px_36px_-28px_rgba(59,43,46,0.55)]">
+            <div className="mb-3 text-[11px] uppercase tracking-[0.12em] text-muted-2">
+              On my shelf
+            </div>
+
+            {!session?.user ? (
+              <p className="text-sm text-muted">Log in to add this book to your shelf.</p>
+            ) : shelfEntry ? (
+              <>
+                <ShelfStatusSelect entryId={shelfEntry.id} status={shelfEntry.status} />
+                <RemoveFromShelfButton entryId={shelfEntry.id} />
+              </>
+            ) : (
+              <AddToShelfButton
+                book={{
+                  externalId: book.externalId ?? "",
+                  title: book.title,
+                  authors: authorNames,
+                  genres: genreNames,
+                  description: book.description,
+                  coverUrl: book.coverUrl,
+                  publishedYear: book.publishedYear,
+                  pageCount: book.pageCount
+                }}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Book description, full width below the cover/info row */}
       {book.description && (
         <div className="mx-auto  max-w-270 px-7">
