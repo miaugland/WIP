@@ -98,10 +98,10 @@ export default async function BookPage({
 
       {/* Top section: cover image on the left, everything else on the right */}
       <section className="relative mt-4 overflow-hidden rounded-b-[44px] bg-linear-to-b from-[#fbeef1] to-[#fdf5f3]">
-        <div className="mx-auto grid max-w-270 grid-cols-[minmax(0, 200px)_minmax(0,1fr)] items-center gap-11 px-7 py-11">
+        <div className="mx-auto grid max-w-270 grid-cols-[minmax(0,200px)_minmax(0,1fr)] items-center gap-11 px-7 py-11">
 
           {/*  bookcover  */}
-          <div className="aspect-2/3 rotate-[-2.5deg] overflow-hidden rounded-1-1g rounded-r-[22px] shadow-[0_26px_50px_-26px_rgba(59,43,46,0.5)]">
+          <div className="aspect-2/3 overflow-hidden rounded-1-1g rounded-r-[22px] shadow-[0_26px_50px_-26px_rgba(59,43,46,0.5)]">
             {book.coverUrl ? (
               <img
                 src={book.coverUrl}
