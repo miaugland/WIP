@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReviewForm from "./ReviewForm";
+import StarRatingInput from "./StarRatingInput";
 
 const RATING_LABELS: Record<number, string> = {
-    1: "Not for me",
-    2: "It was okay",
-    3: "Liked it",
-    4: "Really liked it",
-    5: "Loved it"
+    1: "did not like it",
+    2: "it was ok",
+    3: "liked it",
+    4: "really liked it",
+    5: "it was amazing!"
 };
 
 export default function RatingWidget({
@@ -23,7 +24,6 @@ export default function RatingWidget({
 }) {
     const router = useRouter();
     const [rating, setRating] = useState(initialRating ?? 0);
-    const [hovered, setHovered] = useState(0);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState(false);
     const [formOpen, setFormOpen] = useState(false);
@@ -113,7 +113,7 @@ export default function RatingWidget({
                 )}
             </div>
 
-            {error && <p className="mt-1 text-sm text-red-600">Couldn't save rating</p>}
+            {error && <p className="mt-1 text-sm text-error">Couldn't save rating</p>}
 
             {!formOpen ? (
                 <button

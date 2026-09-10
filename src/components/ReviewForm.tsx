@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import StarRatingInput from "./StarRatingInput";
 
 export default function ReviewForm({
   bookId,
@@ -29,11 +30,9 @@ export default function ReviewForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookId, rating, content }),
       });
-
       if (!res.ok) {
         throw new Error();
       }
-
       router.refresh();
     } catch {
       setError(true);
@@ -43,42 +42,31 @@ export default function ReviewForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-2">
-      <label className="flex items-center gap-2 text-sm">
-        Rating
-        <select
-          value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
-          className="rounded-md border border-black/10 bg-white px-2 py-1 text-sm text-black dark:border-white/15 dark:bg-neutral-900 dark:text-white"
-        >
-          {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
-        /10
-      </label>
+    <form
+      onSubmit={handleSubmit}
+      className="mt-4 flex flex-col gap-3 rounded-[26px] bg-white p-5.5 shadow-[0_16px_36px_-30px_rgba(59,43,46,0.5)]"
+    >
+      <div className="font-display text-[17px] text-ink">Your review</div>
+
+      <StarRatingInput value={rating / 2} onChange={(v) => setRating(v * 2)} disabled={saving} />
 
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Write your review (optional)"
-        rows={3}
-        className="rounded-md border border-black/10 bg-white px-3 py-2 text-sm text-black dark:border-white/15 dark:bg-neutral-900 dark:text-white"
+        placeholder="What stayed with you when you closed the book?"
+        rows={4}
+        className="w-full resize-y rounded-[18px] bg-[#fdf3f4] px-4 py-3.5 text-[14.5px] leading-relaxed text-ink outline-none placeholder:text-muted-2"
       />
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-end gap-2.5">
         <button
           type="submit"
           disabled={saving}
-          className="self-start rounded-md bg-[#181717] px-4 py-2 text-sm font-medium text-white hover:bg-[#181717]/90 disabled:opacity-50"
+          className="rounded-full bg-accent px-5 py-2.5 text-[13.5px] text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
         >
-          {saving ? "Saving …" : initialRating ? "Update review" : "Post review"}
+          {saving ? "Saving ..." : initialRating ? "Update review" : "Post review"}
         </button>
-        {error && (
-          <span className="text-sm text-red-600">Something went wrong</span>
-        )}
+        {error && <span className="text-sm text-error">Something went wrong</span>}
       </div>
     </form>
   );
