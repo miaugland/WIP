@@ -29,7 +29,6 @@ export default function RatingWidget({
     const [formOpen, setFormOpen] = useState(false);
 
     const ratingOutOfFive = rating / 2;
-    const displayValue = hovered || ratingOutOfFive;
 
     async function quickRate(starValue: number) {
         // starvalue is 0.5-5, convert to backend 1-10
@@ -62,49 +61,7 @@ export default function RatingWidget({
     return (
         <div>
             <div className="flex flex-wrap items-center gap-2.5">
-                <div className="flex" onMouseLeave={() => setHovered(0)}>
-                    {[1, 2, 3, 4, 5].map((star) => {
-                        const fillPercent = Math.max(
-                            0,
-                            Math.min(100, (displayValue - (star - 1)) * 100)
-                        );
-
-                        return (
-                            <div key={star} className="relative h-6.5 w-6.5 text-2xl leading-none">
-                                {/* empty star underneath*/}
-                                <span className="pointer-events-none absolute inset-0 select-none text-[#e2cdd2]">
-                                    ★
-                                </span>
-
-                                {/* filled star, clipped to the right width for half/full */}
-                                <span
-                                    className="pointer-events-none absolute inset-0 select-none overflow-hidden text-accent-hover"
-                                    style={{ width: `${fillPercent}%` }}
-                                >
-                                    ★
-                                </span>
-
-                                {/* invisible click targets*/}
-                                <button
-                                    type="button"
-                                    aria-label={`Rate ${star - 0.5} stars`}
-                                    disabled={saving}
-                                    onClick={() => quickRate(star - 0.5)}
-                                    onMouseEnter={() => setHovered(star - 0.5)}
-                                    className="absolute inset-y-0 left-0 w-1/2 disabled:cursor-not-allowed"
-                                />
-                                <button
-                                    type="button"
-                                    aria-label={`Rate ${star} stars`}
-                                    disabled={saving}
-                                    onClick={() => quickRate(star)}
-                                    onMouseEnter={() => setHovered(star)}
-                                    className="absolute inset-y-0 right-0 w-1/2 disabled:cursor-not-allowed"
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
+                <StarRatingInput value={ratingOutOfFive} onChange={quickRate} disabled={saving} />
 
                 {ratingOutOfFive > 0 && (
                     <span className="font-display text-sm italic text-muted">

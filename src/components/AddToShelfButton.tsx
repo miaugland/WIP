@@ -43,7 +43,7 @@ export default function AddToShelfButton({ book }: { book: GoogleBookResult }) {
         {status === "loading" ? "Adding ..." : "Add to shelf"}
       </button>
       {status === "error" && (
-        <span className="text-sm text-red-600">Something went wrong.</span>
+        <span className="text-sm text-error">Something went wrong.</span>
       )}
     </div>
   );

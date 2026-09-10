@@ -9,6 +9,7 @@ import AddToShelfButton from "@/components/AddToShelfButton";
 import ShelfStatusSelect from "@/components/ShelfStatusSelect";
 import RemoveFromShelfButton from "@/components/RemoveFromShelfButton";
 import ReviewForm from "@/components/ReviewForm";
+import BookDescription from "@/components/BookDescription";
 
 function formatReviewDate(date: Date) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long" }).format(date);
@@ -116,17 +117,20 @@ export default async function BookPage({
             )}
           </div>
 
+          {/*  title of the book  */}
           <div className="min-w-0">
             <h1 className="m-0 mb-2.5 font-display text-[clamp(38px,5vw,62px)] leading-[1.05] tracking-tight text-ink text-wrap-pretty">
               {book.title}
             </h1>
 
+            {/*  author(s) of the book  */}
             {authorNames.length > 0 && (
               <div className="mb-5 font-display text-xl italic text-muted">
                 by <span className="text-accent-hover">{authorNames.join(", ")}</span>
               </div>
             )}
 
+            {/*  average rating out of 5  */}
             <div className="flex flex-wrap items-center gap-4.5 text-sm text-muted">
               {averageRatingOutOfFive && (
                 <span className="inline-flex items-baseline gap-2">
@@ -142,8 +146,10 @@ export default async function BookPage({
                 </span>
               )}
 
+              {/*  how many reviews this book has  */}
               <span>{reviews.length} reviews</span>
 
+              {/*  how many pages this book has  */}
               {book.pageCount && (
                 <>
                   <span className="h-1.5 w-1.5 rounded-full bg-[#dcc2c8]" />
@@ -151,6 +157,7 @@ export default async function BookPage({
                 </>
               )}
 
+              {/*  what year the book was published  */}
               {book.publishedYear && (
                 <>
                   <span className="h-1.5 w-1.5 rounded-full bg-[#dcc2c8]" />
@@ -197,9 +204,9 @@ export default async function BookPage({
 
       {/* Book description, full width below the cover/info row */}
       {book.description && (
-        <div className="mx-auto  max-w-270 px-7">
-          <p className="mt-6 text-sm text-ink">
-            {book.description}
+        <div className="mx-auto max-w-270 px-7">
+          <p className="mt-6">
+            <BookDescription text={book.description} />
           </p>
         </div>
       )}

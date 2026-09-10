@@ -61,7 +61,7 @@ export default function SearchPage() {
         </button>
       </form>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-4 text-sm text-error">{error}</p>}
 
       <ul className="mt-6 flex flex-col gap-4">
         {results.map((book) => (
