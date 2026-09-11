@@ -10,6 +10,7 @@ import ShelfStatusSelect from "@/components/ShelfStatusSelect";
 import RemoveFromShelfButton from "@/components/RemoveFromShelfButton";
 import ReviewForm from "@/components/ReviewForm";
 import BookDescription from "@/components/BookDescription";
+import RatingWidget from "@/components/RatingWidget";
 
 function formatReviewDate(date: Date) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long" }).format(date);
@@ -199,6 +200,18 @@ export default async function BookPage({
               />
             )}
           </div>
+          {session?.user && (
+            <div className="rounded-[26px] bg-white p-5 shadow-[0_16px_36px_-28px_rgba(59,43,46,0.55)]">
+              <div className="mb-2.5 text-[11px] uppercase tracking-[0.12em] text-muted-2">
+                My rating
+              </div>
+              <RatingWidget
+                bookId={book.id}
+                initialRating={myReview?.rating}
+                initialContent={myReview?.content}
+              />
+            </div>
+          )}
         </div>
       </div>
 
