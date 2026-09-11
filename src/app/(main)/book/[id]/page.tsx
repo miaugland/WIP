@@ -11,6 +11,7 @@ import RemoveFromShelfButton from "@/components/RemoveFromShelfButton";
 import ReviewForm from "@/components/ReviewForm";
 import BookDescription from "@/components/BookDescription";
 import RatingWidget from "@/components/RatingWidget";
+import ReadingProgress from "@/components/ReadingProgress";
 
 function formatReviewDate(date: Date) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long" }).format(date);
@@ -212,6 +213,16 @@ export default async function BookPage({
               />
             </div>
           )}
+
+          {shelfEntry?.status === "READING" && (
+            <ReadingProgress
+              entryId={shelfEntry.id}
+              currentPage={shelfEntry.currentPage}
+              totalPages={book.pageCount}
+              startedAt={shelfEntry.startedAt}
+            />
+          )}
+
         </div>
       </div>
 

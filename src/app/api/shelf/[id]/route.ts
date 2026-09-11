@@ -19,9 +19,9 @@ export async function PATCH(
   }
 
   const { id } = await params;
-  const { status } = await request.json();
+  const { status, currentPage } = await request.json();
 
-  if (!validStatuses.includes(status)) {
+  if (status != undefined && !validStatuses.includes(status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
 
@@ -31,9 +31,33 @@ export async function PATCH(
     return NextResponse.json({ error: "Entry not found" }, { status: 404 });
   }
 
+  const data: {
+    status?: typeof status;
+    currentPage?: number | null
+    startedAt?: Date;
+    finishedAt?: Date;
+  } = {};
+
+  if (status !== undefined) {
+    data.status = status;
+
+    if (status === "READING" && !entry.startedAt) {
+      data.startedAt = new Date();
+    }
+
+    if (status === "READ") {
+      data.finishedAt = new Date();
+      data.currentPage = null;
+    }
+  }
+
+  if (currentPage !== undefined) {
+    data.currentPage = currentPage;
+  }
+
   const updated = await prisma.shelfEntry.update({
     where: { id },
-    data: { status },
+    data,
   });
 
   revalidatePath("/shelf");
