@@ -17,6 +17,7 @@ export default function ReadingProgress({
 }) {
     const router = useRouter();
     const [page, setPage] = useState(currentPage ?? 0);
+    const [inputValue, setInputValue] = useState(currentPage ? String(currentPage) : "");
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState(false);
 
@@ -41,6 +42,14 @@ export default function ReadingProgress({
         } finally {
             setSaving(false);
         }
+    }
+
+    function handleBlur() {
+        const parsed = inputValue === "" ? 0 : Number(inputValue);
+        const safeValue = Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+        setPage(safeValue);
+        setInputValue(String(safeValue));
+        savePage(safeValue);
     }
 
     async function markFinished() {
@@ -77,7 +86,7 @@ export default function ReadingProgress({
                 )}
             </div>
 
-            <div className="mb-3 h-2.25 overflow-hidden rounded-full bg-[#ded4fs]">
+            <div className="mb-3 h-2.25 overflow-hidden rounded-full bg-[#ded4f2]">
                 <div
                     className="h-full rounded-full bg-[#7a63a8] transition-[width] duration-200"
                     style={{ width: `${progressPercent}%` }}
@@ -89,10 +98,11 @@ export default function ReadingProgress({
                     type="number"
                     min={0}
                     max={totalPages ?? undefined}
-                    value={page}
+                    value={inputValue}
+                    placeholder="0"
                     disabled={saving}
-                    onChange={(e) => setPage(Number(e.target.value))}
-                    onBlur={() => savePage(page)}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onBlur={handleBlur}
                     className="w-17.5 rounded-xl bg-white px-2.5 py-2 text-[14px] text-[#382e4f] outline-none disabled:opacity-50"
                 />
                 <span>
