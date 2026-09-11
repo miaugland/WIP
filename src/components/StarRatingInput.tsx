@@ -2,6 +2,19 @@
 
 import { useState } from "react";
 
+function StarIcon({ className }: { className?: string }) {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            className={className}
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+        </svg>
+    );
+}
+
 export default function StarRatingInput({
     value,
     onChange,
@@ -20,15 +33,16 @@ export default function StarRatingInput({
                 const fillPercent = Math.max(0, Math.min(100, (displayValue - (star - 1)) * 100));
 
                 return (
-                    <div key={star} className="relative h-6.5 w-6.5 text-2xl leading-none">
-                        <span className="pointer-events-none absolute inset-0 select-none text-[#e2cdd2]">
-                            ★
-                        </span>
-                        <span className="pointer-events-none absolute inset-0 select-none overflow-hidden text-accent-hover"
+                    <div key={star} className="relative h-6.5 w-6.5">
+                        <StarIcon className="absolute inset-0 h-full w-full text-[#e2cdd2]" />
+
+                        <div
+                            className="absolute inset-0 overflow-hidden"
                             style={{ width: `${fillPercent}%` }}
                         >
-                            ★
-                        </span>
+                            <StarIcon className="h-6.5 w-6.5 text-accent-hover" />
+                        </div>
+
                         <button
                             type="button"
                             aria-label={`Rate ${star - 0.5} stars`}
@@ -41,7 +55,8 @@ export default function StarRatingInput({
                             type="button"
                             aria-label={`Rate ${star} stars`}
                             disabled={disabled}
-                            onClick={() => setHovered(star)}
+                            onClick={() => onChange(star)}
+                            onMouseEnter={() => setHovered(star)}
                             className="absolute inset-y-0 right-0 w-1/2 disabled:cursor-not-allowed"
                         />
                     </div>
