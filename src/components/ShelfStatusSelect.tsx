@@ -49,20 +49,28 @@ export default function ShelfStatusSelect({
   }
 
   return (
-    <div className="mt-1 flex items-center gap-2">
-      <select
-        value={current}
-        disabled={saving}
-        onChange={(e) => handleChange(e.target.value)}
-        className="rounded-md border border-black/10 bg-white px-2 py-1 text-sm text-black disabled:opacity-50 dark:border-white/15 dark:bg-neutral-900 dark:text-white"
-      >
-        {statusOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      {error && <span className="text-sm text-red-600">Couldn&apos;t update</span>}
+    <div>
+      <div className="flex flex-wrap gap-1.5">
+        {statusOptions.map((option) => {
+          const active = option.value === current;
+          return (
+            <button
+              key={option.value}
+              type="button"
+              disabled={saving}
+              onClick={() => handleChange(option.value)}
+              className={`inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-[13.5px] transition-colors disabled:opacity-50 ${active
+                ? "bg-accent text-white"
+                : "bg-[#f6e9ec] text-muted hover:bg-[#f0dde1]"
+                }`}
+            >
+              {active && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+      {error && <p className="mt-2 text-sm text-error"> Couldn't update</p>}
     </div>
   );
 }

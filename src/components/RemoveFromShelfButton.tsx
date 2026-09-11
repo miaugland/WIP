@@ -28,16 +28,16 @@ export default function RemoveFromShelfButton({ entryId }: { entryId: string }) 
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="mt-2">
       <button
         type="button"
         onClick={handleClick}
         disabled={loading}
-        className="rounded-md border border-red-600/30 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-600/10 disabled:opacity-50"
+        className="text-[12.5px] text-muted underline-offset-2 hover:text-error hover:underline disabled:opacity-50"
       >
         {loading ? "Removing …" : "Remove from shelf"}
       </button>
-      {error && <span className="text-sm text-red-600">Couldn&apos;t remove</span>}
+      {error && <span className="mt-1 text-sm text-error">Couldn't remove</span>}
     </div>
   );
 }

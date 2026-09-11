@@ -29,7 +29,7 @@ export default function AddToShelfButton({ book }: { book: GoogleBookResult }) {
   }
 
   if (status === "added") {
-    return <span className="text-sm text-green-600">Added to your shelf. ✓</span>;
+    return <span className="text-sm text-accent-hover">Added to your shelf. ✓</span>;
   }
 
   return (
@@ -38,12 +38,12 @@ export default function AddToShelfButton({ book }: { book: GoogleBookResult }) {
         type="button"
         onClick={handleClick}
         disabled={status === "loading"}
-        className="rounded-md border border-black/10 px-3 py-1.5 text-sm font-medium hover:bg-black/5 disabled:opacity-50 dark:border-white/15 dark:hover:bg-white/10"
+        className="rounded-full bg-accent px-4 py-2 text-[13.5px] font-medium text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
       >
         {status === "loading" ? "Adding ..." : "Add to shelf"}
       </button>
       {status === "error" && (
-        <span className="text-sm text-red-600">Something went wrong.</span>
+        <span className="text-sm text-error">Something went wrong.</span>
       )}
     </div>
   );
